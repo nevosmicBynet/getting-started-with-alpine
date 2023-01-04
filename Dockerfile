@@ -1,4 +1,4 @@
-FROM alpine:latest
-RUN apk add nginx
+FROM nginx:alpine
 
-CMD echo 'Hello World'
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
