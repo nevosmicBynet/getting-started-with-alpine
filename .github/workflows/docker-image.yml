@@ -23,9 +23,9 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v1
       with:
+        docker_image: michaln28/alpine-get-started
         username: ${{ secrets.DOCKER_USER_NAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         push: true
-        docker_image: michaln28/alpine-get-started
         tags: latest
         labels: michaln28/alpine-get-started
