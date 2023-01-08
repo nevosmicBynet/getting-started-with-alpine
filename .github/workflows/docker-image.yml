@@ -23,8 +23,8 @@ jobs:
     - name: Extract metadata (tags, labels) for Docker
       id: meta
       uses: docker/metadata-action@v2
-        with:
-          images: michaln28/alpine-get-started
+      with:
+        images: michaln28/alpine-get-started
       
     - name: Build and push Docker image
       uses: docker/build-push-action@v1
