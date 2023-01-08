@@ -26,5 +26,6 @@ jobs:
         username: ${{ secrets.DOCKER_USER_NAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         push: true
-        tags: michaln28/alpine-get-started:latest
+        docker_image: michaln28/alpine-get-started
+        tags: latest
         labels: michaln28/alpine-get-started
