@@ -24,6 +24,4 @@ jobs:
       run: docker build -t michaln28/alpine-get-started:${{ github.run_number }} .
     - name: Push Docker image
       run: docker push michaln28/alpine-get-started:${{ github.run_number }}
-      with:
-        username: ${{ secrets.DOCKER_USER_NAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+    
