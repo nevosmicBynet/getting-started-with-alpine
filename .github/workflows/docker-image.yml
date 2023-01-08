@@ -21,8 +21,8 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           
     - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v2
+      id: meta
+      uses: docker/metadata-action@v2
         with:
           images: michaln28/alpine-get-started
       
