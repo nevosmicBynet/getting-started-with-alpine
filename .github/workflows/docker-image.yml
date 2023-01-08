@@ -23,6 +23,7 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v1
       with:
-        context: .
+        username: ${{ secrets.DOCKER_USER_NAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
         push: true
         tags: ${{ github.run_number }}
