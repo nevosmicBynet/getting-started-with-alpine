@@ -20,18 +20,10 @@ jobs:
           username: ${{ secrets.DOCKER_USER_NAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           
-    - name: Extract metadata (tags, labels) for Docker
-      id: meta
-      uses: docker/metadata-action@v2
+    - name: Build Docker image
+      run: docker build -t michaln28/alpine-get-started:${{ github.run_number }} .
+    - name: Push Docker image
+      run: docker push michaln28/alpine-get-started:${{ github.run_number }}
       with:
-        images: michaln28/alpine-get-started
-      
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v1
-      with:
-        docker_image: michaln28/alpine-get-started
         username: ${{ secrets.DOCKER_USER_NAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        push: true
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
