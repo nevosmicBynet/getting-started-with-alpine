@@ -26,4 +26,4 @@ jobs:
         username: ${{ secrets.DOCKER_USER_NAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         push: true
-        tags: ${{ github.run_number }}
+        tags: michaln28/alpine-get-started:latest
