@@ -11,7 +11,6 @@ jobs:
   build-container:
     name: Build nginx container image
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -20,7 +19,7 @@ jobs:
       with:
           registry: alpine-get-started
           username: ${{ secrets.DOCKER_USER_NAME }}
-          password: ${{ secrets.DOCKER_PASSWARD}}
+          password: ${{ secrets.DOCKER_PASSWARD }}
     - name: Build and push Docker image
       uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
       with:
