@@ -10,13 +10,11 @@ jobs:
   security:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@master
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/node@master
         env:
-          SNYK_TOKEN&#58; &#36;&#123;&#123; secrets.SNYK_TOKEN &#125;&#125;
-        with:
-          command: monitor
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
   build-container:
   needs: [security]
