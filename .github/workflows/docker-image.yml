@@ -19,19 +19,14 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }} 
       - name: Build Docker image
         run: docker build -t michaln28/alpine-get-started:v-${{ github.run_number }} .
-  security:
-    needs: [build-container]
-    name: security
-    runs-on: ubuntu-latest
-    steps:
-    - name: Run Snyk to check Docker image for vulnerabilities
-      uses: snyk/actions/docker@master
-      env:
-        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      with:
-        image: michaln28/alpine-get-started:v-${{ github.run_number }}  
+      - name: Run Snyk to check Docker image for vulnerabilities
+        uses: snyk/actions/docker@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          image: michaln28/alpine-get-started:v-${{ github.run_number }}  
   publish:
-    needs: [build-container,security]
+    needs: [build-container]
     name: publish image to dockerhub
     runs-on: ubuntu-latest
     steps:
