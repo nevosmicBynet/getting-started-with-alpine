@@ -17,20 +17,20 @@ jobs:
           SNYK_TOKEN&#58; &#36;&#123;&#123; secrets.SNYK_TOKEN &#125;&#125;
         with:
           command: monitor
-          
+
   build-container:
   needs: [security]
-    name: Build nginx container image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Log in to the Container registry
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USER_NAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+  name: Build nginx container image
+  runs-on: ubuntu-latest
+  steps:
+    - name: Log in to the Container registry
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USER_NAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
           
-      - name: Build Docker image
-        run: docker build -t michaln28/alpine-get-started:v-${{ github.run_number }} .
-      - name: Push Docker image
-        run: docker push michaln28/alpine-get-started:v-${{ github.run_number }}
+    - name: Build Docker image
+      run: docker build -t michaln28/alpine-get-started:v-${{ github.run_number }} .
+    - name: Push Docker image
+      run: docker push michaln28/alpine-get-started:v-${{ github.run_number }}
     
