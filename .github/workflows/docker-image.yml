@@ -32,6 +32,7 @@ jobs:
   publish:
     name: publish image to dockerhub
     runs-on: ubuntu-latest
+    steps:
       - name: Push Docker image
         run: docker push michaln28/alpine-get-started:v-${{ github.run_number }}
       
