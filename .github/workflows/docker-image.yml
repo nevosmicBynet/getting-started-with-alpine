@@ -15,7 +15,6 @@ jobs:
         uses: actions/checkout@v2
       - name: Run Snyk PYTHON to check for vulnerabilities
         uses: snyk/actions/python@master
-        working-directory: app
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
