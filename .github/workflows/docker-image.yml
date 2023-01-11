@@ -10,9 +10,17 @@ jobs:
   security:
     name: snyk python
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.7", "3.8", "3.9", "3.10"]
+
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
       - name: Run Snyk PYTHON to check for vulnerabilities
         uses: snyk/actions/python-3.7@master
         env:
@@ -25,7 +33,7 @@ jobs:
     name: Build nginx container image
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2      
+      - uses: actions/checkout@v3      
       - name: Log in to the Container registry
         uses: docker/login-action@v2
         with:
