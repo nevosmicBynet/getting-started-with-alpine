@@ -11,7 +11,8 @@ jobs:
     name: snyk python
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+      - uses: actions/checkout@v2
       - name: Run Snyk PYTHON to check for vulnerabilities
         working-directory: app
         uses: snyk/actions/python@master
@@ -25,7 +26,7 @@ jobs:
     name: Build nginx container image
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3      
+      - uses: actions/checkout@v2      
       - name: Log in to the Container registry
         uses: docker/login-action@v2
         with:
