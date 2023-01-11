@@ -15,11 +15,11 @@ jobs:
         uses: actions/checkout@v2
       - name: Run Snyk PYTHON to check for vulnerabilities
         working-directory: app
-        uses: snyk/actions/python@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --severity-threshold=high
+          uses: snyk/actions/python@master
+          env:
+            SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          with:
+            args: --severity-threshold=high
 
   build-container:
     needs: [security]
