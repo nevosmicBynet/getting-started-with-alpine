@@ -13,6 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Run Snyk to check for vulnerabilities
+        uses: clarkio/snyk-cli-action@1.0.0
         run: |
           snyk monitor --file=./main.js \
           echo $pwd 
