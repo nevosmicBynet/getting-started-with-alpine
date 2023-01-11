@@ -20,7 +20,7 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          command: snyk --help
+          command: snyk test
 
   build-container:
     needs: [security]
