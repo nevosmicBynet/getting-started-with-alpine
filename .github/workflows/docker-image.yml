@@ -19,6 +19,7 @@ jobs:
           args: --severity-threshold=high
 
   build-container:
+  needs: [snyk-scan]
     name: Build nginx container image
     runs-on: ubuntu-latest
     steps:
