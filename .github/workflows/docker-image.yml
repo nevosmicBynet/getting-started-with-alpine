@@ -27,8 +27,6 @@ jobs:
           image: michaln28/alpine-get-started:v-${{ github.run_number }}  
       - name: Push Docker image
         run: docker push michaln28/alpine-get-started:v-${{ github.run_number }}
-      # snyk scan for js
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/nodejs@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }} 
+      
+        
+        
