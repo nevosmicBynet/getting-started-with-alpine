@@ -2,9 +2,9 @@ name: Create and publish a Docker image with security check using Snyk
 
 on:
   push:
-    branches: [ "sonar_scan" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "sonar_scan" ]
+    branches: [ "main" ]
 
 jobs:
   security:
@@ -32,6 +32,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: app/
 
   build-container:
     needs: [security]
