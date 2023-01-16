@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "sonar_scan" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "sonar_scan" ]
 
 jobs:
   security:
