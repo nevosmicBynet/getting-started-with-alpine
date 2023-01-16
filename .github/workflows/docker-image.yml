@@ -56,8 +56,8 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USER_NAME }}
           password: ${{ secrets.DOCKER_PASSWORD }} 
-      - name: Pull Docker image
-        run: docker pull michaln28/alpine-get-started:v-${{ github.run_number }}
+      - name: Build Docker image
+        run: docker build -t michaln28/alpine-get-started:v-${{ github.run_number }} .
       - name: Run Snyk to check Docker image for vulnerabilities
         uses: snyk/actions/docker@master
         env:
