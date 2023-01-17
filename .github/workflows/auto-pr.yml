@@ -1,8 +1,8 @@
-name: Automatic Pull Request pipe-line
+name: Automatic Pull Request
 
 on:
   push:
-    branches: [ "main1" ]
+    branches: [ "patch/*" ]
 
 jobs:
   updateAuthor:
