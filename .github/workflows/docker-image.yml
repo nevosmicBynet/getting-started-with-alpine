@@ -51,31 +51,17 @@ jobs:
         run: echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
 
       # Semantic Versioning
-      - name: Version
-        id: ver
-        uses: paulhatch/semantic-version@v5.0.2
-        with:
-          # The prefix to use to identify tags
-          tag_prefix: "v"
-          major_pattern: "(MAJOR)"
-          # A string which indicates the flags used by the `major_pattern` regular expression. Supported flags: idgs
-          major_regexp_flags: ""
-          minor_pattern: "(MINOR)"
-          minor_regexp_flags: ""
-          # A string to determine the format of the version output
-          version_format: "${major}.${minor}.${patch}-prerelease${increment}"
-          # Optional path to check for changes. If any changes are detected in the path the
-          # 'changed' output will true. Enter multiple paths separated by spaces.
-          change_path: "src/my-service"
-          # Named version, will be used as suffix for name version tag
-          namespace: my-service
-          # If this is set to true, *every* commit will be treated as a new version.
-          bump_each_commit: false
-          # If true, the body of commits will also be searched for major/minor patterns to determine the version type.
-          search_commit_body: false
-          # Prevents pre-v1.0.0 version from automatically incrementing the major version.
-          # If enabled, when the major version is 0, major releases will be treated as minor and minor as patch. Note that the version_type output is unchanged.
-          enable_prerelease_mode: true
+      - name: Process version of the tag
+        id: version
+        uses: ncipollo/semantic-version-action@v1
+      - name: Dump steps context
+        env:
+          STEPS_CONTEXT: ${{ toJson(steps.version.outputs) }}
+        run: echo "$STEPS_CONTEXT"
+      - name: Dump previous tag
+        env:
+          PREVIOUS_TAG: ${{ steps.version.outputs.previous_tag }}
+        run: echo "$PREVIOUS_TAG"
 
       # Build and Publish.
       - name: Log in to the Container registry
@@ -85,17 +71,17 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }} 
 
       - name: Build Docker image
-        run: docker build -t michaln28/alpine-get-started:v-${{ steps.ver.outputs.version_format }} .
+        run: docker build -t michaln28/alpine-get-started:v-${{ steps.version.outputs.PREVIOUS_TAG }} .
 
       - name: Run Snyk to check Docker image for vulnerabilities
         uses: snyk/actions/docker@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          image: michaln28/alpine-get-started:v-${{ steps.ver.outputs.version_format }}  
+          image: michaln28/alpine-get-started:v-${{ steps.version.outputs.PREVIOUS_TAG }}  
           # command:  --prune-repeated-subdependencies
       - name: Push Docker image
-        run: docker push michaln28/alpine-get-started:v-${{ steps.ver.outputs.version_format }}
+        run: docker push michaln28/alpine-get-started:v-${{ steps.version.outputs.PREVIOUS_TAG }}
       
         
         
