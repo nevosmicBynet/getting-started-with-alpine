@@ -1,18 +1,6 @@
 const msg = 'Hello World!';
 console.log(msg);
-console.log(msg);
-console.log(msg);
-console.log(msg);
-console.log(msg);
-console.log(msg);
-console.log(msg);
-console.log(msg);
-console.log(msg);
-console.log(msg);
-console.log(msg);
-console.log(msg);
-console.log(msg);
-console.log(msg);
+
 /*
 This is a comment section
 this section is very very very long
