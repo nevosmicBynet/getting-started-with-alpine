@@ -2,7 +2,7 @@ name: Automatic Pull Request pipe-line
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main1" ]
 
 jobs:
   updateAuthor:
