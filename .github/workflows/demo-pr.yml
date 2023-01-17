@@ -1,7 +1,7 @@
 name: Automatic Pull Request pipe-line
 
 on:
-  pull_request:
+  push:
     branches: [ "main" ]
 
 jobs:
