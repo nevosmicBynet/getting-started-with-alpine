@@ -1,8 +1,6 @@
 name: Create and publish a Docker image with security check using Snyk
 
 on:
-  push:
-    branches: [ "sonar_scan" ]
   pull_request:
     branches: [ "sonar_scan" ]
 
