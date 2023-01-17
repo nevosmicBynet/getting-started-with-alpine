@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  security scan - build docker image and publish:
+  scanBuildPublish:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
