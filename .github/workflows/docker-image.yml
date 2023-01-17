@@ -9,9 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3 
-          # with:
-          #   fetch-depth: 0
+        uses: actions/checkout@v2 
+        # Specify zero to pull the full history and tags.
+          with:
+          fetch-depth: 0
 
       - name: Setup-Node  
         uses: actions/setup-node@v3
@@ -52,7 +53,6 @@ jobs:
 
       # Semantic Versioning
       - name: Version
-        id: ver
         uses: paulhatch/semantic-version@v5.0.2
         with:
         # The prefix to use to identify tags
@@ -85,8 +85,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }} 
 
       - name: Build Docker image
-        run: docker build -t michaln28/alpine-get-started:v-${{ steps.ver.outputs.MAJOR }} .
-        #${{ github.run_number }} .
+        run: docker build -t michaln28/alpine-get-started:v-${{ github.run_number }} .
 
       - name: Run Snyk to check Docker image for vulnerabilities
         uses: snyk/actions/docker@master
