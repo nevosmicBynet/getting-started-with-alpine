@@ -68,9 +68,9 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USER_NAME }}
           password: ${{ secrets.DOCKER_PASSWORD }} 
-
+#steps.versioning.outputs.version
       - name: Build Docker image
-        run: docker build -t michaln28/alpine-get-started:${{ steps.versioning.outputs.version }} .
+        run: docker build -t michaln28/alpine-get-started:${{ github.run_number }} .
 
       - name: Run Snyk to check Docker image for vulnerabilities
         uses: snyk/actions/docker@master
@@ -78,9 +78,9 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           command: --severity-threshold=high
-          image: michaln28/alpine-get-started:${{ steps.versioning.outputs.version }}
+          image: michaln28/alpine-get-started:${{ github.run_number }}
       - name: Push Docker image
-        run: docker push michaln28/alpine-get-started:${{ steps.versioning.outputs.version }}
+        run: docker push michaln28/alpine-get-started:${{ github.run_number }}
       
       # Release
 
