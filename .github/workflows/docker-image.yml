@@ -2,7 +2,7 @@ name: Create and publish a Docker image with security check using Snyk and Sonar
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "patch/repeated-subdependencies" ]
 
 jobs:
   scanBuildPublish:
