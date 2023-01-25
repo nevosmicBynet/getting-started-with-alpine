@@ -1,30 +1,30 @@
-name: Automatic Pull Request
+# name: Automatic Pull Request
 
-on:
-  push:
-    branches: [ "patch/*" ]
+# on:
+#   push:
+#     branches: [ "patch/*" ]
 
-jobs:
-  updateAuthor:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+# jobs:
+#   updateAuthor:
+#     runs-on: ubuntu-latest
+#     steps:
+#     - name: Checkout
+#       uses: actions/checkout@v3
 
-    - name: Extract git commit data
-      uses: rlespinasse/git-commit-data-action@v1.x
+#     - name: Extract git commit data
+#       uses: rlespinasse/git-commit-data-action@v1.x
 
-    - name: Update author info
-      run: echo ${{ env.GIT_COMMIT_AUTHOR_NAME }} > AUTHOR
-    - name: Raise PR
-      uses: peter-evans/create-pull-request@v3
-      with:
-        branch: "auto-pr-branch"
-        base: main
-        title: "demo for pr"
-        commiter: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}">
-        author: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}">
-        body:
-          This is to show auto PR creation
-        token: ${{ secrets.GITHUB_TOKEN }}
+#     - name: Update author info
+#       run: echo ${{ env.GIT_COMMIT_AUTHOR_NAME }} > AUTHOR
+#     - name: Raise PR
+#       uses: peter-evans/create-pull-request@v3
+#       with:
+#         branch: "auto-pr-branch"
+#         base: main
+#         title: "demo for pr"
+#         commiter: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}">
+#         author: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}">
+#         body:
+#           This is to show auto PR creation
+#         token: ${{ secrets.GITHUB_TOKEN }}
 
