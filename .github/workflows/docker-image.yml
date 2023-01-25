@@ -51,17 +51,17 @@ jobs:
         run: echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
 
       # Semantic Versioning
-      - name: Process version of the tag
-        id: version
-        uses: ncipollo/semantic-version-action@v1
-      - name: Dump steps context
-        env:
-          STEPS_CONTEXT: ${{ toJson(steps.version.outputs) }}
-        run: echo "$STEPS_CONTEXT"
-      - name: Dump previous tag
-        env:
-          PREVIOUS_TAG: ${{ steps.version.outputs.previous_tag }}
-        run: echo "$PREVIOUS_TAG"
+      # - name: Process version of the tag
+      #   id: version
+      #   uses: ncipollo/semantic-version-action@v1
+      # - name: Dump steps context
+      #   env:
+      #     STEPS_CONTEXT: ${{ toJson(steps.version.outputs) }}
+      #   run: echo "$STEPS_CONTEXT"
+      # - name: Dump previous tag
+      #   env:
+      #     PREVIOUS_TAG: ${{ steps.version.outputs.previous_tag }}
+      #   run: echo "$PREVIOUS_TAG"
 
       # Build and Publish.
       - name: Log in to the Container registry
@@ -71,17 +71,17 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }} 
 
       - name: Build Docker image
-        run: docker build -t michaln28/alpine-get-started:v-${{ steps.version.outputs.PREVIOUS_TAG }} .
+        run: docker build -t michaln28/alpine-get-started:v-${{ github.run_number }} .
 
       - name: Run Snyk to check Docker image for vulnerabilities
         uses: snyk/actions/docker@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          image: michaln28/alpine-get-started:v-${{ steps.version.outputs.PREVIOUS_TAG }}  
-          command:  --prune-repeated-subdependencies
+          image: michaln28/alpine-get-started:v-${{ github.run_number }}  
+          #command:  --prune-repeated-subdependencies
       - name: Push Docker image
-        run: docker push michaln28/alpine-get-started:v-${{ steps.version.outputs.PREVIOUS_TAG }}
+        run: docker push michaln28/alpine-get-started:v-${{ github.run_number }}
       
         
         
