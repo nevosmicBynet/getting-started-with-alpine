@@ -77,9 +77,8 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          image: michaln28/alpine-get-started:${{ steps.versioning.outputs.version }} 
-          #command: --severity-threshold=high 
-          #command:  --prune-repeated-subdependencies
+          command: --severity-threshold=high
+          image: michaln28/alpine-get-started:${{ steps.versioning.outputs.version }}
       - name: Push Docker image
         run: docker push michaln28/alpine-get-started:${{ steps.versioning.outputs.version }}
       
