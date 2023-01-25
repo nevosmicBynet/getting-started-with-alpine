@@ -77,8 +77,8 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          command: --severity-threshold=high
           image: michaln28/alpine-get-started:${{ github.run_number }}
+          args: --severity-threshold=high
       - name: Push Docker image
         run: docker push michaln28/alpine-get-started:${{ github.run_number }}
       
