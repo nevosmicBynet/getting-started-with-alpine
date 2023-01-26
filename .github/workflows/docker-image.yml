@@ -2,7 +2,7 @@ name: Create and publish a Docker image with security check using Snyk and Sonar
 
 on:
   push:
-    branches: [ "patch/repeated-subdependencies" ]
+    branches: [ "main" ]
 
 jobs:
   scanBuildPublish:
@@ -19,7 +19,7 @@ jobs:
         id: versioning
         uses: paulhatch/semantic-version@v5.0.2
         with:
-          branch: patch/repeated-subdependencies
+          branch: main
           tag_prefix: "v"
           major_pattern: "BREAKING CHANGE: "
           minor_pattern: "feature:"
@@ -68,19 +68,19 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USER_NAME }}
           password: ${{ secrets.DOCKER_PASSWORD }} 
-#steps.versioning.outputs.version
+      #github.run_number
       - name: Build Docker image
-        run: docker build -t michaln28/alpine-get-started:${{ github.run_number }} .
+        run: docker build -t michaln28/alpine-get-started:${{ steps.versioning.outputs.version }} .
 
       - name: Run Snyk to check Docker image for vulnerabilities
         uses: snyk/actions/docker@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          image: michaln28/alpine-get-started:${{ github.run_number }}
+          image: michaln28/alpine-get-started:${{ steps.versioning.outputs.version }}
           args: --severity-threshold=high
       - name: Push Docker image
-        run: docker push michaln28/alpine-get-started:${{ github.run_number }}
+        run: docker push michaln28/alpine-get-started:${{ steps.versioning.outputs.version }}
       
       # Release
 
