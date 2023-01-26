@@ -83,6 +83,11 @@ jobs:
         run: docker push michaln28/alpine-get-started:${{ steps.versioning.outputs.version }}
       
       # Release
+      - name: Release
+        uses: rymndhng/release-on-push-action@master
+        with:
+          tag_prefix: "v"
+          release_name: "Release ${{ steps.versioning.outputs.version }}"
 
         
         
