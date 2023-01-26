@@ -14,7 +14,7 @@ jobs:
         with:
           fetch-depth: 0
 
- # Semantic Versioning 4
+ # Semantic Versioning 5
       - name: Semantic Versioning
         id: versioning
         uses: paulhatch/semantic-version@v5.0.2
@@ -47,7 +47,7 @@ jobs:
         uses: sonarsource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
 
         # Check the Quality Gate status.
       - name: SonarQube Quality Gate check
