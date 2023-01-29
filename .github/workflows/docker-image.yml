@@ -15,16 +15,23 @@ jobs:
           fetch-depth: 0
 
  # Semantic Versioning 5
-      - name: Semantic Versioning
-        id: versioning
-        uses: paulhatch/semantic-version@v5.0.2
-        with:
-          branch: main
-          tag_prefix: "v"
-          major_pattern: "BREAKING CHANGE: "
-          minor_pattern: "feature:"
-          version_format: "${major}.${minor}.${increment}"
-           
+      # - name: Semantic Versioning
+      #   id: versioning
+      #   uses: paulhatch/semantic-version@v5.0.2
+      #   with:
+      #     branch: main
+      #     tag_prefix: "v"
+      #     major_pattern: "BREAKING CHANGE: "
+      #     minor_pattern: "feature:"
+      #     version_format: "${major}.${minor}.${increment}"
+
+      # https://github.com/anothrNick/github-tag-action
+    - name: Bump version and push tag
+      uses: anothrNick/github-tag-action@1.55.0 
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        WITH_V: true
+        INITIAL_VERSION: v0.0.1
 
       - name: Setup-Node  
         uses: actions/setup-node@v3
@@ -72,17 +79,17 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }} 
       #github.run_number
       - name: Build Docker image
-        run: docker build -t michaln28/alpine-get-started:${{ steps.versioning.outputs.version }} .
+        run: docker build -t michaln28/alpine-get-started:${{ steps.versioning.outputs.tag }} .
 
       - name: Run Snyk to check Docker image for vulnerabilities
         uses: snyk/actions/docker@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          image: michaln28/alpine-get-started:${{ steps.versioning.outputs.version }}
+          image: michaln28/alpine-get-started:${{ steps.versioning.outputs.tag }}
           args: --severity-threshold=high
       - name: Push Docker image
-        run: docker push michaln28/alpine-get-started:${{ steps.versioning.outputs.version }}
+        run: docker push michaln28/alpine-get-started:${{ steps.versioning.outputs.tag }}
       
       # Release
       - name: Release GitHub Actions
