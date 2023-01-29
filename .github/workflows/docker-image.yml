@@ -25,12 +25,12 @@ jobs:
       #     minor_pattern: "feature:"
       #     version_format: "${major}.${minor}.${increment}"
 
-    - name: Bump version and push tag
-      uses: anothrNick/github-tag-action@1.55.0 
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        WITH_V: true
-        INITIAL_VERSION: v0.0.1
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.55.0 
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+          INITIAL_VERSION: v0.0.1
 
       - name: Setup-Node  
         uses: actions/setup-node@v3
