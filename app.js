@@ -1,4 +1,4 @@
-const msg = 'Hello LOL!';
+const msg = 'Hello FROM LIRON!';
 console.log(msg);
 
 /*
