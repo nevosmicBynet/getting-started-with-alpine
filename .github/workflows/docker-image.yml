@@ -10,7 +10,7 @@ jobs:
   call-workflow-1:
     uses: nevosmicBynet/getting-started-with-alpine/.github/workflows/reusable-workflow-called.yml@main
     with:
-      username: Michal
+      user_name: Michal
   call-workflow-2:
     uses: nevosmicBynet/getting-started-with-alpine/.github/workflows/reusable-workflow-called.yml@main
     with:
