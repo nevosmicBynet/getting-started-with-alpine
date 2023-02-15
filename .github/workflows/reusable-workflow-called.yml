@@ -2,7 +2,7 @@ name: 01-reusable-workflow-called
 
 on:
   workflow_call:
-    input:
+    inputs:
       user_name:
         required: true
         type: string
