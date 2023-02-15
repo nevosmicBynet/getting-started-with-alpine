@@ -1,0 +1,16 @@
+name: 01-reusable-workflow-called
+
+on:
+  workflow_call:
+    input:
+      username:
+        required: true
+        type: string
+
+
+jobs:
+  example_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run hello world script
+        run: echo Hello, ${{ inputs.username }}
