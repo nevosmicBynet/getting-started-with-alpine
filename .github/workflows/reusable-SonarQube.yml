@@ -3,9 +3,9 @@ name: reusable-sonarscan-workflow-called
 on:
   workflow_call:
     secrets:
-      github_token:
+      mygithub_token:
         required: true
-      sonar_token:
+      mysonar_token:
         required: true
 
 jobs:
@@ -17,8 +17,8 @@ jobs:
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
       env:
-        GITHUB_TOKEN: ${{ secrets.github_token }}
-        SONAR_TOKEN: ${{ secrets.sonar_token }} 
+        GITHUB_TOKEN: ${{ secrets.mygithub_token }}
+        SONAR_TOKEN: ${{ secrets.mysonar_token }} 
       with:
         args: -X
 
@@ -29,7 +29,7 @@ jobs:
       # Force to fail step after specific time.
       timeout-minutes: 5
       env:
-        SONAR_TOKEN: ${{ secrets.sonar_token }}
+        SONAR_TOKEN: ${{ secrets.mysonar_token }}
 
     - name: "Example show SonarQube Quality Gate Status value"
       run: echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"

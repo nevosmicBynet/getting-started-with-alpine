@@ -30,8 +30,8 @@ jobs:
       - uses: .github/workflows/reusable-SonarQube.yml@main
         with:
           secrets:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
+            mygithub_token: ${{ secrets.GITHUB_TOKEN }}
+            mysonar_token: ${{ secrets.SONAR_TOKEN }} 
 
       # - name: SonarCloud Scan
       #   uses: sonarsource/sonarcloud-github-action@master
