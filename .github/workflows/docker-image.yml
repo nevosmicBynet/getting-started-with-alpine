@@ -40,13 +40,13 @@ jobs:
   docker:
     needs: [setUp,sonarScan]
     uses: nevosmicBynet/getting-started-with-alpine/.github/workflows/reusable-docker.yml@main
-      with:
-        new_tag: ${{ needs.setUp.outputs.output_tag }}
-      secrets:
-        mydocker_user_name: ${{ secrets.DOCKER_USER_NAME }}
-        mydocker_password: ${{ secrets.DOCKER_PASSWORD }}
-        mysnyk_token : ${{ secrets.SNYK_TOKEN }}
-        
+    with:
+      new_tag: ${{ needs.setUp.outputs.output_tag }}
+    secrets:
+      mydocker_user_name: ${{ secrets.DOCKER_USER_NAME }}
+      mydocker_password: ${{ secrets.DOCKER_PASSWORD }}
+      mysnyk_token : ${{ secrets.SNYK_TOKEN }}
+
   release:
     needs: [docker,setUp,sonarScan]
     runs-on: ubuntu-latest
