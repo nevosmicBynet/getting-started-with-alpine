@@ -10,6 +10,8 @@ jobs:
   
   setUp:
     runs-on: ubuntu-latest
+    outputs:
+      output_tag: ${{ steps.versioning.outputs.tag }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3 
@@ -66,18 +68,18 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }} 
       
       - name: Build Docker image
-        run: docker build -t michaln28/alpine-get-started:${{ steps.versioning.outputs.tag }} .
+        run: docker build -t michaln28/alpine-get-started:${{ needs.setUp.outputs.output_tag }} .
 
       - name: Run Snyk to check Docker image for vulnerabilities
         uses: snyk/actions/docker@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          image: michaln28/alpine-get-started:${{ steps.versioning.outputs.tag }}
+          image: michaln28/alpine-get-started:${{ needs.setUp.outputs.output_tag }}
           args: --severity-threshold=high
           
       - name: Push Docker image
-        run: docker push michaln28/alpine-get-started:${{ steps.versioning.outputs.tag }}
+        run: docker push michaln28/alpine-get-started:${{ needs.setUp.outputs.output_tag }}
       
       # Release
       - name: Release GitHub Actions
@@ -91,7 +93,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ steps.versioning.outputs.tag }}
+          tag_name: ${{ needs.setUp.outputs.output_tag }}
      
         
         
