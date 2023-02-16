@@ -4,8 +4,8 @@ on:
   workflow_call:
     inputs:
       new_tag:
-      required: true
-      type: string
+        required: true
+        type: string
     secrets:
       mydocker_user_name:
         required: true
