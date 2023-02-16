@@ -7,14 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  call-workflow-1:
-    uses: nevosmicBynet/getting-started-with-alpine/.github/workflows/reusable-workflow-called.yml@main
-    with:
-      user_name: Michal
-  call-workflow-2:
-    uses: nevosmicBynet/getting-started-with-alpine/.github/workflows/reusable-workflow-called.yml@main
-    with:
-      user_name: Nevo  
+
   scanBuildPublish:
     runs-on: ubuntu-latest
     steps:
@@ -34,28 +27,31 @@ jobs:
         uses: actions/setup-node@v3
       - run: npm ci
       - run: npm run build --if-present
-
-      - name: SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
+      - uses: .github/workflows/reusable-SonarQube.yml@main
         with:
-          args: -X
+          secrets:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
 
-        # Check the Quality Gate status.
-      - name: SonarQube Quality Gate check
-        id: sonarqube-quality-gate-check
-        uses: sonarsource/sonarqube-quality-gate-action@master
-        # Force to fail step after specific time.
-        timeout-minutes: 5
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      # Optionally you can use the output from the Quality Gate in another step.
-      # The possible outputs of the `quality-gate-status` variable are `PASSED`, `WARN` or `FAILED`.
+      # - name: SonarCloud Scan
+      #   uses: sonarsource/sonarcloud-github-action@master
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
+      #   with:
+      #     args: -X
 
-      - name: "Example show SonarQube Quality Gate Status value"
-        run: echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
+      #   # Check the Quality Gate status.
+      # - name: SonarQube Quality Gate check
+      #   id: sonarqube-quality-gate-check
+      #   uses: sonarsource/sonarqube-quality-gate-action@master
+      #   # Force to fail step after specific time.
+      #   timeout-minutes: 5
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      # - name: "Example show SonarQube Quality Gate Status value"
+      #   run: echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
 
       - name: Log in to the Container registry
         uses: docker/login-action@v2
@@ -73,6 +69,7 @@ jobs:
         with:
           image: michaln28/alpine-get-started:${{ steps.versioning.outputs.tag }}
           args: --severity-threshold=high
+          
       - name: Push Docker image
         run: docker push michaln28/alpine-get-started:${{ steps.versioning.outputs.tag }}
       
