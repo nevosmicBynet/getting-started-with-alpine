@@ -31,8 +31,8 @@ jobs:
   sonarScan:
     uses: nevosmicBynet/getting-started-with-alpine/.github/workflows/reusable-SonarQube.yml@main
     secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
+      mygithub_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      mysonar_TOKEN: ${{ secrets.SONAR_TOKEN }} 
    
 
       # - name: SonarCloud Scan
