@@ -37,53 +37,19 @@ jobs:
       mygithub_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       mysonar_TOKEN: ${{ secrets.SONAR_TOKEN }} 
    
-
-      # - name: SonarCloud Scan
-      #   uses: sonarsource/sonarcloud-github-action@master
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
-      #   with:
-      #     args: -X
-
-      #   # Check the Quality Gate status.
-      # - name: SonarQube Quality Gate check
-      #   id: sonarqube-quality-gate-check
-      #   uses: sonarsource/sonarqube-quality-gate-action@master
-      #   # Force to fail step after specific time.
-      #   timeout-minutes: 5
-      #   env:
-      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-      # - name: "Example show SonarQube Quality Gate Status value"
-      #   run: echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
   docker:
     needs: [setUp,sonarScan]
+    uses: nevosmicBynet/getting-started-with-alpine/.github/workflows/reusable-docker.yml@main
+      with:
+        new_tag: ${{ needs.setUp.outputs.output_tag }}
+      secrets:
+        mydocker_user_name: ${{ secrets.DOCKER_USER_NAME }}
+        mydocker_password: ${{ secrets.DOCKER_PASSWORD }}
+        mysnyk_token : ${{ secrets.SNYK_TOKEN }}
+        
+  release:
+    needs: [docker,setUp,sonarScan]
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Log in to the Container registry
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USER_NAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }} 
-      
-      - name: Build Docker image
-        run: docker build -t michaln28/alpine-get-started:${{ needs.setUp.outputs.output_tag }} .
-
-      - name: Run Snyk to check Docker image for vulnerabilities
-        uses: snyk/actions/docker@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          image: michaln28/alpine-get-started:${{ needs.setUp.outputs.output_tag }}
-          args: --severity-threshold=high
-          
-      - name: Push Docker image
-        run: docker push michaln28/alpine-get-started:${{ needs.setUp.outputs.output_tag }}
-      
-      # Release
       - name: Release GitHub Actions
         uses: technote-space/release-github-actions@v6
       - name: Echo commit sha to file
