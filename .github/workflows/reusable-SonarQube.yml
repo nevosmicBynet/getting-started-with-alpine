@@ -9,7 +9,7 @@ on:
         required: true
 
 jobs:
-  reusable_workflow_job:
+  reusable-sonarscan-workflow_job:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
