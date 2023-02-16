@@ -50,6 +50,7 @@ jobs:
   release:
     needs: [docker,setUp,sonarScan]
     runs-on: ubuntu-latest
+    steps:
       - name: Release GitHub Actions
         uses: technote-space/release-github-actions@v6
       - name: Echo commit sha to file
