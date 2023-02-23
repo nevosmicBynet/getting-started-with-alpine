@@ -1,8 +1,8 @@
-  name: Create and publish a Docker image with security check using Snyk and Sonar
+  name: Snyk
 
 on:
   push:
-    branches: [ "my_snyk_branch" ]
+    branches: [ "main" ]
 
 jobs:
   setUp:
@@ -23,7 +23,7 @@ jobs:
             INITIAL_VERSION: 0.0.1
   docker:
     needs: setUp
-    uses: nevosmicBynet/getting-started-with-alpine/.github/workflows/reusable-docker.yml@main
+    uses: nevosmicBynet/getting-started-with-alpine/.github/workflows/reusable-docker.yml@my_snyk_branch
     with:
       new_tag: ${{ needs.setUp.outputs.output_tag }}
     secrets:

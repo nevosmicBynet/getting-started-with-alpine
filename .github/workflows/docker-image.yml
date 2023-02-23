@@ -1,8 +1,8 @@
 name: Create and publish a Docker image with security check using Snyk and Sonar
 
 on:
-  push:
-    branches: [ "main1" ]
+  pull_request:
+    types: [closed]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -30,15 +30,15 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
 
-  sonarScan:
-    needs: setUp
-    uses: nevosmicBynet/getting-started-with-alpine/.github/workflows/reusable-SonarQube.yml@main
-    secrets:
-      mygithub_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      mysonar_TOKEN: ${{ secrets.SONAR_TOKEN }} 
+  # sonarScan:
+  #   needs: setUp
+  #   uses: nevosmicBynet/getting-started-with-alpine/.github/workflows/reusable-SonarQube.yml@main
+  #   secrets:
+  #     mygithub_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     mysonar_TOKEN: ${{ secrets.SONAR_TOKEN }} 
    
   docker:
-    needs: [setUp,sonarScan]
+    needs: setUp
     uses: nevosmicBynet/getting-started-with-alpine/.github/workflows/reusable-docker.yml@main
     with:
       new_tag: ${{ needs.setUp.outputs.output_tag }}
@@ -48,7 +48,7 @@ jobs:
       mysnyk_token : ${{ secrets.SNYK_TOKEN }}
 
   release:
-    needs: [docker,setUp,sonarScan]
+    needs: [docker,setUp]
     runs-on: ubuntu-latest
     steps:
       - name: Release GitHub Actions
