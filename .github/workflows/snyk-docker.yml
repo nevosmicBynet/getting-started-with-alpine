@@ -3,8 +3,10 @@
 on:
   push:
     branches: [ "my_snyk_branch" ]
+  workflow_dispatch:
 
 jobs:
+
   setUp:
       runs-on: ubuntu-latest
       outputs:
