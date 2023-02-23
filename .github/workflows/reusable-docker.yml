@@ -34,9 +34,8 @@ jobs:
       env:
         SNYK_TOKEN: ${{ secrets.mysnyk_token }}
       with:
-        image: michaln28/alpine-get-started:${{ inputs.new_tag }}
-        command: ignore 
-        args: --severity-threshold=high --id='SNYK-PYTHON-WERKZEUG-3319936' --reason='testing'
+        image: michaln28/alpine-get-started:${{ inputs.new_tag }} 
+        args: --severity-threshold=high --policy-path=.snyk
           
     # - name: Push Docker image
     #   run: docker push michaln28/alpine-get-started:${{ inputs.new_tag }}

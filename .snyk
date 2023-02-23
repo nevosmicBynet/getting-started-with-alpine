@@ -1,0 +1,4 @@
+ignore:
+  'SNYK-PYTHON-WERKZEUG-3319936':
+    - '*':
+        reason: "test"
