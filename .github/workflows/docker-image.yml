@@ -38,7 +38,7 @@ jobs:
   #     mysonar_TOKEN: ${{ secrets.SONAR_TOKEN }} 
    
   docker:
-    needs: [setUp,sonarScan]
+    needs: setUp
     uses: nevosmicBynet/getting-started-with-alpine/.github/workflows/reusable-docker.yml@main
     with:
       new_tag: ${{ needs.setUp.outputs.output_tag }}
@@ -48,7 +48,7 @@ jobs:
       mysnyk_token : ${{ secrets.SNYK_TOKEN }}
 
   release:
-    needs: [docker,setUp,sonarScan]
+    needs: [docker,setUp]
     runs-on: ubuntu-latest
     steps:
       - name: Release GitHub Actions
