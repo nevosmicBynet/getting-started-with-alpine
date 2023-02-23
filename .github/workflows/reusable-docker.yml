@@ -35,7 +35,7 @@ jobs:
         SNYK_TOKEN: ${{ secrets.mysnyk_token }}
       with:
         image: michaln28/alpine-get-started:${{ inputs.new_tag }}
-        args: --severity-threshold=high
+        args: --severity-threshold=high 
           
     - name: Push Docker image
       run: docker push michaln28/alpine-get-started:${{ inputs.new_tag }}

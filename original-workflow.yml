@@ -1,0 +1,85 @@
+name: Create and publish a Docker image with security check using Snyk and Sonar
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  scanBuildPublish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3 
+      
+      - name: Bump version and push tag
+        id: versioning
+        uses: anothrNick/github-tag-action@1.55.0 
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+          DEFAULT_BUMP: PATCH
+          INITIAL_VERSION: 0.0.1
+
+      - name: Setup-Node  
+        uses: actions/setup-node@v3
+      - run: npm ci
+      - run: npm run build --if-present
+
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
+        with:
+          args: -X
+
+        # Check the Quality Gate status.
+      - name: SonarQube Quality Gate check
+        id: sonarqube-quality-gate-check
+        uses: sonarsource/sonarqube-quality-gate-action@master
+        # Force to fail step after specific time.
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      # Optionally you can use the output from the Quality Gate in another step.
+      # The possible outputs of the `quality-gate-status` variable are `PASSED`, `WARN` or `FAILED`.
+
+      - name: "Example show SonarQube Quality Gate Status value"
+        run: echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USER_NAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }} 
+
+      - name: Build Docker image
+        run: docker build -t michaln28/alpine-get-started:${{ steps.versioning.outputs.tag }} .
+
+      - name: Run Snyk to check Docker image for vulnerabilities
+        uses: snyk/actions/docker@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          image: michaln28/alpine-get-started:${{ steps.versioning.outputs.tag }}
+          args: --severity-threshold=high
+      - name: Push Docker image
+        run: docker push michaln28/alpine-get-started:${{ steps.versioning.outputs.tag }}
+      
+      # Release
+      - name: Release GitHub Actions
+        uses: technote-space/release-github-actions@v6
+      - name: Echo commit sha to file
+        run: |
+          echo ${{ github.sha }} > Release.txt
+          echo ${{ github.ref }} >> Release.txt
+      - name: Test
+        run: cat Release.txt
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.versioning.outputs.tag }}
+      
+
+        
+        
