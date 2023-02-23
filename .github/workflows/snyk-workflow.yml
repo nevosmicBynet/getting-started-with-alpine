@@ -2,7 +2,7 @@
 
 on:
   push:
-    branches: [ "my_snyk_branch" ]
+    branches: [ "main" ]
 
 jobs:
   setUp:
