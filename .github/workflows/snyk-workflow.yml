@@ -23,7 +23,7 @@ jobs:
             INITIAL_VERSION: 0.0.1
   docker:
     needs: setUp
-    uses: nevosmicBynet/getting-started-with-alpine/.github/workflows/reusable-docker.yml@my_snyk_branch
+    uses: nevosmicBynet/getting-started-with-alpine/.github/workflows/reusable-docker.yml@main
     with:
       new_tag: ${{ needs.setUp.outputs.output_tag }}
     secrets:
