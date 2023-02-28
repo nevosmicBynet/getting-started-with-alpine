@@ -26,8 +26,8 @@ jobs:
         username: ${{ secrets.mydocker_user_name }}
         password: ${{ secrets.mydocker_password }} 
       
-     - name: Build Docker image
-       run: docker build -t michaln28/alpine-get-started:${{ inputs.new_tag }} .
+    - name: Build Docker image
+      run: docker build -t michaln28/alpine-get-started:${{ inputs.new_tag }} .
 
     - name: Run Snyk to check Docker image for vulnerabilities
       uses: snyk/actions/docker@master
@@ -37,6 +37,6 @@ jobs:
         image: michaln28/alpine-get-started:${{ inputs.new_tag }} 
         args: --severity-threshold=high --policy-path=.snyk
           
-     - name: Push Docker image
-       run: docker push michaln28/alpine-get-started:${{ inputs.new_tag }}
+    - name: Push Docker image
+      run: docker push michaln28/alpine-get-started:${{ inputs.new_tag }}
       
