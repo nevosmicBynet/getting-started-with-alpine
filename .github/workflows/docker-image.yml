@@ -1,34 +1,62 @@
-name: Create and publish a Docker image with security check using Snyk and Sonar
-
+name: external api to space
 on:
-  pull_request:
-    types: [closed]
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      name:
+        description: 'Enter docker image tag, it will be deployed to kebermad - hello kubernetes second'
+        required: true
+        default: 'docker tag here...'
+# name: Create and publish a Docker image with security check using Snyk and Sonar
+# 
+# on:
+#   pull_request:
+#     types: [closed]
+#   # Allows you to run this workflow manually from the Actions tab
+#   workflow_dispatch:
 
 jobs:
-  
   setUp:
     runs-on: ubuntu-latest
-    outputs:
-      output_tag: ${{ steps.versioning.outputs.tag }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3 
+      - name: Declare some variables
+        shell: bash
+        run: |
+          echo "sha_short=$(git rev-parse --short "$GITHUB_SHA")" >> "$GITHUB_ENV"
+          echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >> "$GITHUB_ENV"
+      
+      - name: Another step
+        id: shortsha
+        run: |
+          echo "Sha: ${{ env.sha_short }}"
+          echo "Branch: ${{ env.branch }}"
 
-      - name: Bump version and push tag
-        id: versioning
-        uses: anothrNick/github-tag-action@1.55.0 
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          WITH_V: true
-          DEFAULT_BUMP: PATCH
-          INITIAL_VERSION: 0.0.1
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.mydocker_user_name }}
+          password: ${{ secrets.mydocker_password }} 
+        
+      - name: Build Docker image
+        run: docker build -t michaln28/alpine-get-started:${{github.event.inputs.name}}-${{ env.sha_short }} .
+            
+      - name: Push Docker image
+        run: docker push michaln28/alpine-get-started:${{github.event.inputs.name}}-${{ env.sha_short }}
 
-      - name: Setup-Node  
-        uses: actions/setup-node@v3
-      - run: npm ci
-      - run: npm run build --if-present
+#      - name: Bump version and push tag
+#        id: versioning
+#        uses: anothrNick/github-tag-action@1.55.0 
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          WITH_V: true
+#          DEFAULT_BUMP: PATCH
+#          INITIAL_VERSION: 0.0.1
+
+#      - name: Setup-Node  
+#        uses: actions/setup-node@v3
+#      - run: npm ci
+#      - run: npm run build --if-present
 
   # sonarScan:
   #   needs: setUp
@@ -37,32 +65,32 @@ jobs:
   #     mygithub_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   #     mysonar_TOKEN: ${{ secrets.SONAR_TOKEN }} 
    
-  docker:
-    needs: setUp
-    uses: nevosmicBynet/getting-started-with-alpine/.github/workflows/reusable-docker.yml@main
-    with:
-      new_tag: ${{ needs.setUp.outputs.output_tag }}
-    secrets:
-      mydocker_user_name: ${{ secrets.DOCKER_USER_NAME }}
-      mydocker_password: ${{ secrets.DOCKER_PASSWORD }}
-      mysnyk_token : ${{ secrets.SNYK_TOKEN }}
-
-  release:
-    needs: [docker,setUp]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Release GitHub Actions
-        uses: technote-space/release-github-actions@v6
-      - name: Echo commit sha to file
-        run: |
-          echo ${{ github.sha }} > Release.txt
-          echo ${{ github.ref }} >> Release.txt
-      - name: Test
-        run: cat Release.txt
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ needs.setUp.outputs.output_tag }}
-     
+# docker:
+#   needs: setUp
+#   uses: nevosmicBynet/getting-started-with-alpine/.github/workflows/reusable-docker.yml@main
+#   with:
+#     new_tag: ${{ needs.setUp.outputs.output_tag }}
+#   secrets:
+#     mydocker_user_name: ${{ secrets.DOCKER_USER_NAME }}
+#     mydocker_password: ${{ secrets.DOCKER_PASSWORD }}
+#     mysnyk_token : ${{ secrets.SNYK_TOKEN }}
+#
+# release:
+#   needs: [docker,setUp]
+#   runs-on: ubuntu-latest
+#   steps:
+#     - name: Release GitHub Actions
+#       uses: technote-space/release-github-actions@v6
+#     - name: Echo commit sha to file
+#       run: |
+#         echo ${{ github.sha }} > Release.txt
+#         echo ${{ github.ref }} >> Release.txt
+#     - name: Test
+#       run: cat Release.txt
+#     - name: Release
+#       uses: softprops/action-gh-release@v1
+#       with:
+#         tag_name: ${{ needs.setUp.outputs.output_tag }}
+#    
         
         
