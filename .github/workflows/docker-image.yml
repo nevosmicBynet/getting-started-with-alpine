@@ -42,8 +42,8 @@ jobs:
           repository: ${{ env.REPOSITORY }}
           tags: ${{github.event.inputs.name}}-${{ steps.commit.outputs.short }}
 
-     - name: Set Docker Image Tag as an Environment Variable
-       run: echo "IMAGE_TAG=${{ steps.docker_build_push.outputs.image }}" >> $GITHUB_ENV
+      - name: Set Docker Image Tag as an Environment Variable
+        run: echo "IMAGE_TAG=${{ steps.docker_build_push.outputs.image }}" >> $GITHUB_ENV
 
       - name: Checkout Target Repository
         uses: actions/checkout@v3
