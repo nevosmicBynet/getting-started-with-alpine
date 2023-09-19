@@ -48,7 +48,10 @@ jobs:
           path: ExampleChart
           ref: image-tags
           token: ${{ secrets.GHCR_PAT }} 
-  
+
+      - name: List Contents of ExampleChart Directory
+        run: ls ExampleChart
+        
       - name: Get Image Tag
         id: get-image-tag
         run: echo "{image_tag}=${{ github.event.inputs.name}}-${{ steps.commit.outputs.short }}" >> $GITHUB_OUTPUT
