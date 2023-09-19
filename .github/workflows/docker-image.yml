@@ -24,20 +24,22 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3 
-      - name: Declare some variables
-        shell: bash
-        run: |
-          echo "sha_short=$(git rev-parse --short "$GITHUB_SHA")" >> "$GITHUB_ENV"
-          echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >> "$GITHUB_ENV"
+#      - name: Declare some variables
+#        shell: bash
+#        run: |
+#          echo "sha_short=$(git rev-parse --short "$GITHUB_SHA")" >> "$GITHUB_ENV"
+#          echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >> "$GITHUB_ENV"
 
+      - id: commit
+        uses: prompt/actions-commit-hash@v3
       - name: Push to GitHub Packages
         uses: docker/build-push-action@v1
         with:
-          username: nevosmicBynet
+          username: ${{ env.USERNAME }}
           password: ${{ secrets.GHCR_PAT }}
           registry: ${{ env.REGISTRY }}
           repository: ${{ env.REPOSITORY }}
-          tags: ${{github.event.inputs.name}}-${{ env.sha_short }}
+          tags: ${{github.event.inputs.name}}-${{ steps.commit.outputs.short }}
 
 #      - name: Bump version and push tag
 #        id: versioning
