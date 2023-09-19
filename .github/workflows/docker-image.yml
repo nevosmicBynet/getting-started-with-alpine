@@ -67,9 +67,9 @@ jobs:
           propertyPath: 'image.tag'
           value: ${{ env.IMAGE_TAG }}
           repository: nevosmicBynet/ExampleChart
-          #branch: main
-          targetBranch: image-tags
-          #createPR: true
+          branch: image-tags
+          targetBranch: main
+          createPR: true
           message: 'Update Image Version to ${{ env.IMAGE_TAG }}'
           token: ${{ secrets.GHCR_PAT }}
           workDir: ExampleChart
