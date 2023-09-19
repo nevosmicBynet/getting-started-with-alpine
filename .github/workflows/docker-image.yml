@@ -45,7 +45,8 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: nevosmicBynet/ExampleChart
-          path: image-tags
+          path: ExampleChart
+          ref: image-tags
           token: ${{ secrets.GHCR_PAT }} 
   
       - name: Get Image Tag
@@ -55,16 +56,16 @@ jobs:
       - name: Update Image Version in the related HelmChart values.yaml
         uses: fjogeleit/yaml-update-action@main
         with:
-          valueFile: 'values.yaml'
+          valueFile: 'ExampleChart/values.yaml'
           propertyPath: 'image.tag'
           value: ${{ steps.get-image-tag.outputs.image_tag }}
           repository: nevosmicBynet/ExampleChart
           branch: main
           targetBranch: image-tags
-          #createPR: true
+          createPR: true
           message: 'Update Image Version to ${{ steps.get-image-tag.outputs.image_tag }}'
           token: ${{ secrets.GHCR_PAT }}
-          workDir: main
+          workDir: ExampleChart
 
 #      - name: Bump version and push tag
 #        id: versioning
