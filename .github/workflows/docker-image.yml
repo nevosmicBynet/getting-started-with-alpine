@@ -51,7 +51,7 @@ jobs:
 
       - name: List Contents of ExampleChart Directory
         run: ls ExampleChart
-        
+
       - name: Get Image Tag
         id: get-image-tag
         run: echo "{image_tag}=${{ github.event.inputs.name}}-${{ steps.commit.outputs.short }}" >> $GITHUB_OUTPUT
@@ -59,7 +59,7 @@ jobs:
       - name: Update Image Version in the related HelmChart values.yaml
         uses: fjogeleit/yaml-update-action@main
         with:
-          valueFile: 'ExampleChart/values.yaml'
+          valueFile: 'values.yaml'
           propertyPath: 'image.tag'
           value: ${{ steps.get-image-tag.outputs.image_tag }}
           repository: nevosmicBynet/ExampleChart
