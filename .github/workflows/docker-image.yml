@@ -47,12 +47,10 @@ jobs:
           repository: nevosmicBynet/ExampleChart
           path: main
           token: ${{ secrets.GHCR_PAT }} 
-
+  
       - name: Get Image Tag
         id: get-image-tag
-        run: |
-          echo "::set-output name=image_tag::${{ github.event.inputs.name}}-${{ steps.commit.outputs.short }}"
-        shell: bash
+        run: echo "{image_tag}=${{ github.event.inputs.name}}-${{ steps.commit.outputs.short }}" >> $GITHUB_OUTPUT
 
       - name: Update Image Version in the related HelmChart values.yaml
         uses: fjogeleit/yaml-update-action@main
@@ -61,12 +59,12 @@ jobs:
           propertyPath: 'image.tag'
           value: ${{ steps.get-image-tag.outputs.image_tag }}
           repository: nevosmicBynet/ExampleChart
-          #branch: deployment/${{ steps.image.outputs.version }}
+          branch: main
           targetBranch: main
           createPR: true
           message: 'Update Image Version to ${{ steps.get-image-tag.outputs.image_tag }}'
           token: ${{ secrets.GHCR_PAT }}
-          #workDir: infrastructure
+          workDir: main
 
 #      - name: Bump version and push tag
 #        id: versioning
