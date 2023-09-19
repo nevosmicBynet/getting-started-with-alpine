@@ -33,7 +33,7 @@ jobs:
       - id: commit
         uses: prompt/actions-commit-hash@v3
       - name: Push to GitHub Packages
-      - id: docker_build_push
+        id: docker_build_push
         uses: docker/build-push-action@v1
         with:
           username: ${{ env.USERNAME }}
