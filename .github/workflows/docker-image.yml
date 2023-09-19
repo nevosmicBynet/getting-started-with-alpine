@@ -59,12 +59,12 @@ jobs:
           propertyPath: 'image.tag'
           value: ${{ steps.get-image-tag.outputs.image_tag }}
           repository: nevosmicBynet/ExampleChart
-          branch: image-tags
-          targetBranch: main
-          createPR: true
+          branch: main
+          targetBranch: image-tags
+          #createPR: true
           message: 'Update Image Version to ${{ steps.get-image-tag.outputs.image_tag }}'
           token: ${{ secrets.GHCR_PAT }}
-          workDir: image-tags
+          workDir: main
 
 #      - name: Bump version and push tag
 #        id: versioning
