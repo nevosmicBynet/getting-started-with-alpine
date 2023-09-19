@@ -45,7 +45,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: nevosmicBynet/ExampleChart
-          path: main
+          path: image-tags
           token: ${{ secrets.GHCR_PAT }} 
   
       - name: Get Image Tag
@@ -59,12 +59,12 @@ jobs:
           propertyPath: 'image.tag'
           value: ${{ steps.get-image-tag.outputs.image_tag }}
           repository: nevosmicBynet/ExampleChart
-          branch: main
+          branch: image-tags
           targetBranch: main
           createPR: true
           message: 'Update Image Version to ${{ steps.get-image-tag.outputs.image_tag }}'
           token: ${{ secrets.GHCR_PAT }}
-          workDir: main
+          workDir: image-tags
 
 #      - name: Bump version and push tag
 #        id: versioning
