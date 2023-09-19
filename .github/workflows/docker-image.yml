@@ -33,6 +33,7 @@ jobs:
       - id: commit
         uses: prompt/actions-commit-hash@v3
       - name: Push to GitHub Packages
+      - id: docker_build_push
         uses: docker/build-push-action@v1
         with:
           username: ${{ env.USERNAME }}
@@ -40,6 +41,9 @@ jobs:
           registry: ${{ env.REGISTRY }}
           repository: ${{ env.REPOSITORY }}
           tags: ${{github.event.inputs.name}}-${{ steps.commit.outputs.short }}
+
+     - name: Set Docker Image Tag as an Environment Variable
+       run: echo "IMAGE_TAG=${{ steps.docker_build_push.outputs.image }}" >> $GITHUB_ENV
 
       - name: Checkout Target Repository
         uses: actions/checkout@v3
@@ -52,21 +56,21 @@ jobs:
       - name: List Contents of ExampleChart Directory
         run: ls ExampleChart
 
-      - name: Get Image Tag
-        id: get-image-tag
-        run: echo "{image_tag}=${{ github.event.inputs.name}}-${{ steps.commit.outputs.short }}" >> $GITHUB_OUTPUT
+  #    - name: Get Image Tag
+  #      id: get-image-tag
+  #      run: echo "{image_tag}=${{ github.event.inputs.name}}-${{ steps.commit.outputs.short }}" >> $GITHUB_OUTPUT
 
       - name: Update Image Version in the related HelmChart values.yaml
         uses: fjogeleit/yaml-update-action@main
         with:
           valueFile: 'values.yaml'
           propertyPath: 'image.tag'
-          value: ${{ steps.get-image-tag.outputs.image_tag }}
+          value: ${{ env.IMAGE_TAG }}
           repository: nevosmicBynet/ExampleChart
-          branch: main
+          #branch: main
           targetBranch: image-tags
-          createPR: true
-          message: 'Update Image Version to ${{ steps.get-image-tag.outputs.image_tag }}'
+          #createPR: true
+          message: 'Update Image Version to ${{ env.IMAGE_TAG }}'
           token: ${{ secrets.GHCR_PAT }}
           workDir: ExampleChart
 
