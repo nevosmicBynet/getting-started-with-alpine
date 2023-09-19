@@ -41,6 +41,33 @@ jobs:
           repository: ${{ env.REPOSITORY }}
           tags: ${{github.event.inputs.name}}-${{ steps.commit.outputs.short }}
 
+      - name: Checkout Target Repository
+        uses: actions/checkout@v3
+        with:
+          repository: nevosmicBynet/ExampleChart
+          path: main
+          token: ${{ secrets.GHCR_PAT }} 
+
+      - name: Get Image Tag
+        id: get-image-tag
+        run: |
+          echo "::set-output name=image_tag::${{ github.event.inputs.name}}-${{ steps.commit.outputs.short }}"
+        shell: bash
+
+      - name: Update Image Version in the related HelmChart values.yaml
+        uses: fjogeleit/yaml-update-action@main
+        with:
+          valueFile: '/values.yaml'
+          propertyPath: 'image.tag'
+          value: ${{ steps.get-image-tag.outputs.image_tag }}
+          repository: nevosmicBynet/ExampleChart
+          #branch: deployment/${{ steps.image.outputs.version }}
+          targetBranch: main
+          createPR: true
+          message: 'Update Image Version to ${{ steps.get-image-tag.outputs.image_tag }}'
+          token: ${{ secrets.GHCR_PAT }}
+          #workDir: infrastructure
+
 #      - name: Bump version and push tag
 #        id: versioning
 #        uses: anothrNick/github-tag-action@1.55.0 
