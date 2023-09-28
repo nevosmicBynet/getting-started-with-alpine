@@ -39,39 +39,40 @@ jobs:
           password: ${{ secrets.GHCR_PAT }}
           registry: ${{ env.REGISTRY }}
           repository: ${{ env.REPOSITORY }}
-          tags: ${{github.event.inputs.name}}-${{ steps.commit.outputs.short }}
+          tags: ${{ steps.commit.outputs.short }}
+          #tags: ${{github.event.inputs.name}}-${{ steps.commit.outputs.short }}
 
       - name: Set Docker Image Tag as an Environment Variable
-        run: echo "IMAGE_TAG=${{github.event.inputs.name}}-${{ steps.commit.outputs.short }}" >> $GITHUB_ENV
+        run: echo "IMAGE_TAG=${{ steps.commit.outputs.short }}" >> $GITHUB_ENV
 
-      - name: Checkout Target Repository
-        uses: actions/checkout@v3
-        with:
-          repository: nevosmicBynet/ExampleChart
-          path: ExampleChart
-          ref: image-tags
-          token: ${{ secrets.GHCR_PAT }} 
+#     - name: Checkout Target Repository
+#       uses: actions/checkout@v3
+#       with:
+#         repository: nevosmicBynet/ExampleChart
+#         path: ExampleChart
+#         ref: image-tags
+#         token: ${{ secrets.GHCR_PAT }} 
+#
+#     - name: List Contents of ExampleChart Directory
+#       run: ls ExampleChart
 
-      - name: List Contents of ExampleChart Directory
-        run: ls ExampleChart
+# #    - name: Get Image Tag
+# #      id: get-image-tag
+# #      run: echo "{image_tag}=${{ github.event.inputs.name}}-${{ steps.commit.outputs.short }}" >> $GITHUB_OUTPUT
 
-  #    - name: Get Image Tag
-  #      id: get-image-tag
-  #      run: echo "{image_tag}=${{ github.event.inputs.name}}-${{ steps.commit.outputs.short }}" >> $GITHUB_OUTPUT
-
-      - name: Update Image Version in the related HelmChart values.yaml
-        uses: fjogeleit/yaml-update-action@main
-        with:
-          valueFile: 'values.yaml'
-          propertyPath: 'image.tag'
-          value: ${{ env.IMAGE_TAG }}
-          repository: nevosmicBynet/ExampleChart
-          branch: image-tags
-          #targetBranch: main
-          #createPR: true
-          message: 'Update Image Version to ${{ env.IMAGE_TAG }}'
-          token: ${{ secrets.GHCR_PAT }}
-          workDir: ExampleChart
+#     - name: Update Image Version in the related HelmChart values.yaml
+#       uses: fjogeleit/yaml-update-action@main
+#       with:
+#         valueFile: 'values.yaml'
+#         propertyPath: 'image.tag'
+#         value: ${{ env.IMAGE_TAG }}
+#         repository: nevosmicBynet/ExampleChart
+#         branch: image-tags
+#         #targetBranch: main
+#         #createPR: true
+#         message: 'Update Image Version to ${{ env.IMAGE_TAG }}'
+#         token: ${{ secrets.GHCR_PAT }}
+#         workDir: ExampleChart
 
 #      - name: Bump version and push tag
 #        id: versioning
